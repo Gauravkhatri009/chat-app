@@ -1,0 +1,1 @@
+https://cloud.mongodb.com/v2/686d1fc88727eb28bfc4d6b2#/metrics/replicaSet/686d203f484cdf7498dd10c1/explorer/chat_db/users/find

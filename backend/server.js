@@ -7,12 +7,15 @@ import cookieParser from 'cookie-parser';
 import cors from "cors";
 import { app, server } from './src/config/socket.js';
 
-import path from 'node:path';
+import path from 'path';
+import { fileURLToPath } from 'url';
+import { dirname } from 'path';
 
 dotenv.config();
 const PORT = process.env.PORT
 
-const __dirname = path.resolve();
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 app.use(express.json({ limit: '10mb' })); //this will allow us to extract json data out of the body
 app.use(cookieParser()); //this will allowed you to parse the cookies

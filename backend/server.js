@@ -7,7 +7,7 @@ import cookieParser from 'cookie-parser';
 import cors from "cors";
 import { app, server } from './src/config/socket.js';
 
-import { path } from "path";
+import path from 'node:path';
 
 dotenv.config();
 const PORT = process.env.PORT

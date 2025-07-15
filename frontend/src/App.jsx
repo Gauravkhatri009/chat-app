@@ -13,14 +13,20 @@ import { Toaster } from "react-hot-toast";
 import { useThemeStore } from "./store/useThemeStore";
 
 export default function App() {
-  const { authUser, checkAuth, isChechingAuth } = useAuthStore();
+  const { authUser, checkAuth, isChechingAuth, onlineUsers, connectSocket } = useAuthStore();
   const { theme } = useThemeStore()
 
-
+  console.log({ onlineUsers })
   //First checking user authentication on loading component
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
+
+  useEffect(() => {
+    if (authUser) {
+      connectSocket(); // ✅ Call when user is actually set
+    }
+  }, [authUser]);
 
   console.log({ authUser });
 

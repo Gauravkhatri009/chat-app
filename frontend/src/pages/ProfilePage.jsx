@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Navigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/useAuthStore';
 import { Camera, User } from 'lucide-react';
 
@@ -12,8 +12,10 @@ const formatJoinDate = (isoDate) => {
 };
 
 const ProfilePage = () => {
-    const { updateProfile, authUser, isUpdatingProfile, isChechingAuth } = useAuthStore();
+    const { updateProfile, authUser, isUpdatingProfile, checkAuth } = useAuthStore();
     const [selectedImage, setSelectedImage] = useState(null);
+
+    const navigate = useNavigate();
 
 
     const handleImageUpload = async (e) => {
@@ -30,17 +32,16 @@ const ProfilePage = () => {
         };
     };
 
-    // ⏳ While auth state is loading
-    if (isChechingAuth) {
-        return (
-            <div className="flex items-center justify-center h-screen pt-20">
-                <span className="loading loading-spinner text-primary text-4xl"></span>
-            </div>
-        );
-    }
+    useEffect(() => {
+        checkAuth();
+    }, []);
+
+
+    if (!authUser) return <p className='text-center mt-8'>Loading profile...</p>;
+
 
     return (
-        <div className='h-screen pt-20'>
+        <div className='min-h-screen pt-20'>
             <div className='max-w-2xl mx-auto p-4 py-8'>
                 <div className='bg-base-300 rounded-xl p-6 space-y-8'>
                     <div className='text-center '>

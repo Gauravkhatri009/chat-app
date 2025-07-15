@@ -1,5 +1,5 @@
 import { useChatStore } from "../store/useChatStore";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
@@ -13,18 +13,18 @@ const ChatContainer = () => {
         getMessages,
         isMessagesLoading,
         selectedUser,
-        // subscribeToMessages,
-        // unsubscribeFromMessages,
+        subscribeToMessages,
+        unsubscribeFromMessages,
     } = useChatStore();
     const { authUser } = useAuthStore();
     const messageEndRef = useRef(null);
 
+    const [previewImage, setPreviewImage] = useState(null); // 👈 New state for preview
+
     useEffect(() => {
         getMessages(selectedUser._id);
-
-        // subscribeToMessages();
-
-        // return () => unsubscribeFromMessages();
+        subscribeToMessages();
+        return () => unsubscribeFromMessages();
     }, [selectedUser._id, getMessages]);
 
     useEffect(() => {
@@ -76,7 +76,8 @@ const ChatContainer = () => {
                                 <img
                                     src={message.image}
                                     alt="Attachment"
-                                    className="sm:max-w-[200px] rounded-md mb-2"
+                                    className="sm:max-w-[200px] rounded-md mb-2 cursor-pointer hover:opacity-90 transition"
+                                    onClick={() => setPreviewImage(message.image)}
                                 />
                             )}
                             {message.text && <p>{message.text}</p>}
@@ -86,7 +87,22 @@ const ChatContainer = () => {
             </div>
 
             <MessageInput />
+
+            {/* 🔍 Image Preview Modal */}
+            {previewImage && (
+                <div
+                    className="fixed inset-0 bg-black bg-opacity-80 flex items-center justify-center z-50"
+                    onClick={() => setPreviewImage(null)}
+                >
+                    <img
+                        src={previewImage}
+                        alt="Full View"
+                        className="max-w-full max-h-full rounded-lg shadow-lg"
+                    />
+                </div>
+            )}
         </div>
     );
 };
+
 export default ChatContainer;

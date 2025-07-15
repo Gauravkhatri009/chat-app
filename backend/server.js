@@ -5,12 +5,14 @@ import dotenv from "dotenv";
 import { connectDB } from './src/config/db.js';
 import cookieParser from 'cookie-parser';
 import cors from "cors";
+import { app, server } from './src/config/socket.js';
 
 dotenv.config();
-const app = express();
 const PORT = process.env.PORT
-app.use(express.json()); //this will allow us to extract json data out of the body
+
+app.use(express.json({ limit: '10mb' })); //this will allow us to extract json data out of the body
 app.use(cookieParser()); //this will allowed you to parse the cookies
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 
 app.use(cors({
     origin: "http://localhost:5173",
@@ -18,11 +20,11 @@ app.use(cors({
 }))
 
 app.use("/api/auth", authRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api/messages", messageRoutes);
 
 
 
-app.listen(PORT, () => {
-    console.log(`Server is running on PORT: ${PORT}`);
+server.listen(PORT, () => {
+    console.log(`🚀 Server running at http://localhost:${PORT}`);
     connectDB()
 })

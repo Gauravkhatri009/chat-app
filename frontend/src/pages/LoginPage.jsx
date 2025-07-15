@@ -26,7 +26,7 @@ const LoginPage = () => {
         login(formData);
 
         const success = validateForm();
-        // if (success === true) signup(formData);
+        if (success === true) login(formData);
     }
 
     return (
@@ -111,8 +111,8 @@ const LoginPage = () => {
                     </form>
                     {/* Form Ends */}
                     <div className='text-center'>
-                        <p className='text-base-content/60'>Already have an Account? {""}
-                            <Link to="/login" className='link link-primary'> Sign in </Link>
+                        <p className='text-base-content/60'>Dont have an Account? {""}
+                            <Link to="/signup" className='link link-primary'> Sign Up </Link>
                         </p>
                     </div>
                 </div>

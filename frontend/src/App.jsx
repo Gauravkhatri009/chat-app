@@ -10,10 +10,14 @@ import { useEffect } from "react";
 
 import { Loader } from "lucide-react";
 import { Toaster } from "react-hot-toast";
+import { useThemeStore } from "./store/useThemeStore";
 
 export default function App() {
   const { authUser, checkAuth, isChechingAuth } = useAuthStore();
+  const { theme } = useThemeStore()
 
+
+  //First checking user authentication on loading component
   useEffect(() => {
     checkAuth();
   }, [checkAuth]);
@@ -26,10 +30,12 @@ export default function App() {
 
     </div>
   )
+
   return (
-    <div>
+    <div data-theme={theme}>
       <Navbar />
       <Routes>
+
         <Route path="/" element={authUser ? <HomePage /> : <Navigate to="/login" />} />
         <Route path="/signup" element={!authUser ? <SignUpPage /> : <Navigate to="/" />} />
         <Route path="/login" element={!authUser ? <LoginPage /> : <Navigate to="/" />} />

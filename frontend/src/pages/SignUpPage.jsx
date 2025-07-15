@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { useAuthStore } from '../store/useAuthStore';
 import { Eye, EyeOff, Loader, Loader2, Mail, MessageSquare, User } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import AuthImagepattern from '../components/AuthImagepattern';
 import toast from 'react-hot-toast';
+
+
 
 const SignUpPage = () => {
     const [showPassword, setShowpassword] = useState(false);
@@ -14,6 +16,15 @@ const SignUpPage = () => {
     });
 
     const { signup, isSigningUp } = useAuthStore();
+
+    // useEffect(() => {
+    //     setFormData({
+    //         fullName: "",
+    //         email: "",
+    //         password: ""
+    //     });
+    // }, []);
+
     const validateForm = () => {
         if (!formData.fullName.trim()) return toast.error("Full name is required");
         if (!formData.email.trim()) return toast.error("Email is required");
@@ -23,12 +34,28 @@ const SignUpPage = () => {
         return true;
 
     }
-    const handleSubmit = (e) => {
+    const navigate = useNavigate();
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         const success = validateForm();
-        if (success === true) signup(formData);
-    }
+        if (success === true) {
+            try {
+                await signup(formData); // Wait for signup to finish
+                setFormData({           // Reset the form fields
+                    fullName: "",
+                    email: "",
+                    password: ""
+                });
+                setShowpassword(false); // Optionally reset password visibility
+                // navigate("/login"); // ✅ Redirect to login page
+            } catch (error) {
+                console.error("Signup failed:", error);
+            }
+        }
+    };
+
 
     return (
         <div className="min-h-screen grid lg:grid-cols-2">
